@@ -7,18 +7,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
 public class ContactController {
 
+    private final ContactService contactService;
 
-    private  ContactService contactService;
     public ContactController(ContactService contactService) {
         this.contactService = contactService;
     }
 
     @GetMapping("/")
     public ResponseEntity<String> home() {
-        return ResponseEntity.ok("FluxKart API is running! Use POST /api/identify to identify contacts.");
+        return ResponseEntity.ok("FluxKart API is running! Use POST /identify to identify contacts.");
     }
 
     @PostMapping("/identify")
@@ -27,8 +26,6 @@ public class ContactController {
         String phoneNumber = request.getPhoneNumber();
 
         ContactResponseDTO responseDTO = contactService.identifyContact(email, phoneNumber);
-
         return ResponseEntity.ok(responseDTO);
     }
-
 }
