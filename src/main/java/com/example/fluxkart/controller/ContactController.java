@@ -16,6 +16,10 @@ public class ContactController {
         this.contactService = contactService;
     }
 
+    @GetMapping("/")
+    public ResponseEntity<String> home() {
+        return ResponseEntity.ok("FluxKart API is running! Use POST /api/identify to identify contacts.");
+    }
 
     @PostMapping("/identify")
     public ResponseEntity<ContactResponseDTO> identifyContact(@RequestBody ContactRequest request) {
