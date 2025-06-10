@@ -22,14 +22,16 @@ Health check endpoint
 Identify and resolve contact information
 
 Request:
+```
 json
 {
   "email": "john.doe@example.com",
   "phoneNumber": "1234567890"
 }
-
+```
 
 Response:
+```
 json
 {
   "contact": {
