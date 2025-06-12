@@ -17,7 +17,7 @@ public class ContactController {
 
     @GetMapping("/")
     public ResponseEntity<String> home() {
-        return ResponseEntity.ok("FluxKart API is running! Use POST /identify to identify contacts.");
+        return ResponseEntity.ok("FluxKart API is running! Use POST /identify to identify contacts. Go to https://fluxkart-frontend.vercel.app to see the frontend  ");
     }
 
     @PostMapping("/identify")
