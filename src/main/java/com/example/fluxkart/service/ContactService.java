@@ -4,7 +4,6 @@ import com.example.fluxkart.dto.ContactResponseDTO;
 import com.example.fluxkart.entity.Contact;
 import com.example.fluxkart.entity.LinkPrecedence;
 import com.example.fluxkart.repository.ContactRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -80,51 +79,54 @@ public class ContactService {
 //            All contacts except primary should:
 //            Be marked as SECONDARY
 //            Have linkedId = primary.id
-            for (Contact c : allContacts) {
-                if (!Objects.equals(c.getId(), primary.getId()) &&
-                        (c.getLinkPrecedence() != LinkPrecedence.SECONDARY || !Objects.equals(primary.getId(), c.getLinkedId()))) {
-                    c.setLinkPrecedence(LinkPrecedence.SECONDARY);
-                    c.setLinkedId(primary.getId());
-                    c.setUpdatedAt(LocalDateTime.now());
-                    contactRepository.save(c);
-                }
+        for (Contact c : allContacts) {
+            if (!Objects.equals(c.getId(), primary.getId()) &&
+                    (c.getLinkPrecedence() != LinkPrecedence.SECONDARY || !Objects.equals(primary.getId(), c.getLinkedId()))) {
+                c.setLinkPrecedence(LinkPrecedence.SECONDARY);
+                c.setLinkedId(primary.getId());
+                c.setUpdatedAt(LocalDateTime.now());
+                contactRepository.save(c);
             }
+        }
 
-            boolean isNewEmail = email != null && allContacts.stream().noneMatch(c -> email.equals(c.getEmail()));
-            boolean isNewPhoneNumber = phoneNumber != null && allContacts.stream().noneMatch(c -> phoneNumber.equals(c.getPhoneNumber()));
+        boolean isNewEmail = email != null && allContacts.stream().noneMatch(c -> email.equals(c.getEmail()));
+        boolean isNewPhoneNumber = phoneNumber != null && allContacts.stream().noneMatch(c -> phoneNumber.equals(c.getPhoneNumber()));
 
-            if (isNewEmail || isNewPhoneNumber) {
-                Contact newSecondary = Contact.builder()
-                        .email(isNewEmail ? email : null)
-                        .phoneNumber(isNewPhoneNumber ? phoneNumber : null)
-                        .linkPrecedence(LinkPrecedence.SECONDARY)
-                        .linkedId(primary.getId())
-                        .createdAt(LocalDateTime.now())
-                        .updatedAt(LocalDateTime.now())
-                        .build();
-                contactRepository.save(newSecondary);
-                allContacts.add(newSecondary);
+        if (isNewEmail || isNewPhoneNumber) {
+            Contact newSecondary = Contact.builder()
+                    .email(isNewEmail ? email : null)
+                    .phoneNumber(isNewPhoneNumber ? phoneNumber : null)
+                    .linkPrecedence(LinkPrecedence.SECONDARY)
+                    .linkedId(primary.getId())
+                    .createdAt(LocalDateTime.now())
+                    .updatedAt(LocalDateTime.now())
+                    .build();
+            contactRepository.save(newSecondary);
+            allContacts.add(newSecondary);
+        }
+
+        // Use LinkedHashSet to maintain insertion order, with primary contact's data first
+        Set<String> emailsSet = new LinkedHashSet<>();
+        Set<String> phoneNumbersSet = new LinkedHashSet<>();
+        List<Long> secondaryIds = new ArrayList<>();
+
+        // Add primary contact's email and phone first
+        if (primary.getEmail() != null) emailsSet.add(primary.getEmail());
+        if (primary.getPhoneNumber() != null) phoneNumbersSet.add(primary.getPhoneNumber());
+
+        // Then add secondary contacts' emails and phones
+        for (Contact c : allContacts) {
+            if (!Objects.equals(c.getId(), primary.getId())) {
+                if (c.getEmail() != null) emailsSet.add(c.getEmail());
+                if (c.getPhoneNumber() != null) phoneNumbersSet.add(c.getPhoneNumber());
+                secondaryIds.add(c.getId());
             }
-
-            Set<String> emails = new HashSet<>();
-            Set<String> phoneNumbers = new HashSet<>();
-            List<Long> secondaryIds = new ArrayList<>();
-
-            if (primary.getEmail() != null) emails.add(primary.getEmail());
-            if (primary.getPhoneNumber() != null) phoneNumbers.add(primary.getPhoneNumber());
-
-            for (Contact c : allContacts) {
-                if (!Objects.equals(c.getId(), primary.getId())) {
-                    if (c.getEmail() != null) emails.add(c.getEmail());
-                    if (c.getPhoneNumber() != null) phoneNumbers.add(c.getPhoneNumber());
-                    secondaryIds.add(c.getId());
-                }
-            }
+        }
 
         return new ContactResponseDTO(
                 primary.getId(),
-                new ArrayList<>(emails),
-                new ArrayList<>(phoneNumbers),
+                new ArrayList<>(emailsSet),
+                new ArrayList<>(phoneNumbersSet),
                 secondaryIds
         );
 
