@@ -19,7 +19,8 @@ Deployment: Render (Backend), Vercel (Frontend)
 Health check endpoint
 
 ### POST /identify
-Description: Identifies and consolidates contact information based on email and/or phone number. \n
+Description: Identifies and consolidates contact information based on email and/or phone number.
+
 Request Body:
 
 ```
@@ -28,6 +29,7 @@ Request Body:
     "phoneNumber": "1234567890"
 }
 ```
+
 Response Format:
 ```
 {
@@ -40,9 +42,12 @@ Response Format:
 }
 ```
 
+
 🧪 Test Cases
-Test Case 1: New Contact Creation
-Scenario: First-time contact with unique email and phone
+Test Case 1: New Contact Creation.
+
+Scenario: First-time contact with unique email and phone.
+
 Request:
 ```
 {
@@ -50,6 +55,7 @@ Request:
 	"phoneNumber": "123456"
 }
 ```
+
 Expected Response:
 ```
 {
@@ -62,8 +68,9 @@ Expected Response:
 }
 ```
 
-Test Case 2: Email Match - New Phone
-Scenario: Existing email with new phone number
+Test Case 2: Email Match - New Phone.
+
+Scenario: Existing email with new phone number.
 
 Request:
 ```
@@ -72,6 +79,7 @@ Request:
     "phoneNumber": "9876543210"
 }
 ```
+
 Expected Response:
 ```
 {
@@ -84,8 +92,9 @@ Expected Response:
 }
 ```
 
-Test Case 3: Phone Match - New Email
-Scenario: Existing phone with new email address
+Test Case 3: Phone Match - New Email.
+
+Scenario: Existing phone with new email address.
 
 Request:
 ```
@@ -94,6 +103,7 @@ Request:
     "phoneNumber": "1234567890"
 }
 ```
+
 Expected Response:
 ```
 {
@@ -106,21 +116,26 @@ Expected Response:
 }
 ```
 
-Test Case 4: Contact Consolidation
-Scenario: Two separate primary contacts get linked through a common contact
+Test Case 4: Contact Consolidation.
+
+Scenario: Two separate primary contacts get linked through a common contact.
+
 Setup:
-sql-- Two existing primary contacts
+
+sql-- Two existing primary contacts.
 ```
 INSERT INTO contacts VALUES (1, '1111111111', 'alice@example.com', NULL, 'PRIMARY', '2023-04-01', '2023-04-01', NULL);
 INSERT INTO contacts VALUES (2, '2222222222', 'bob@example.com', NULL, 'PRIMARY', '2023-04-02', '2023-04-02', NULL);
 ```
-Request: Contact with Alice's email and Bob's phone
+
+Request: Contact with Alice's email and Bob's phone.
 ```
 {
     "email": "alice@example.com",
     "phoneNumber": "2222222222"
 }
 ```
+
 Expected Response:
 ```
 {
