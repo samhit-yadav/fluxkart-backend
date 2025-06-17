@@ -19,7 +19,7 @@ Deployment: Render (Backend), Vercel (Frontend)
 Health check endpoint
 
 ### POST /identify
-Description: Identifies and consolidates contact information based on email and/or phone number.
+Description: Identifies and consolidates contact information based on email and/or phone number. \n
 Request Body:
 
 ```
