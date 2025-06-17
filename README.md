@@ -21,15 +21,16 @@ Health check endpoint
 ### POST /identify
 Description: Identifies and consolidates contact information based on email and/or phone number.
 Request Body:
+
 ```
-json{
+{
     "email": "example@domain.com",
     "phoneNumber": "1234567890"
 }
 ```
 Response Format:
 ```
-json{
+{
     "contact": {
         "primaryContactId": 1,
         "emails": ["primary@email.com", "secondary@email.com"],
@@ -44,14 +45,14 @@ Test Case 1: New Contact Creation
 Scenario: First-time contact with unique email and phone
 Request:
 ```
-json{
+{
 	"email": "mcfly@hillvalley.edu",
 	"phoneNumber": "123456"
 }
 ```
 Expected Response:
 ```
-json{
+{
     "contact": {
         "primaryContactId": 1,
         "emails": ["john@example.com"],
@@ -66,14 +67,14 @@ Scenario: Existing email with new phone number
 
 Request:
 ```
-json{
+{
     "email": "john@example.com",
     "phoneNumber": "9876543210"
 }
 ```
 Expected Response:
 ```
-json{
+{
     "contact": {
         "primaryContactId": 1,
         "emails": ["john@example.com"],
@@ -88,14 +89,14 @@ Scenario: Existing phone with new email address
 
 Request:
 ```
-json{
+{
     "email": "john.doe@company.com",
     "phoneNumber": "1234567890"
 }
 ```
 Expected Response:
 ```
-json{
+{
     "contact": {
         "primaryContactId": 1,
         "emails": ["john@example.com", "john.doe@company.com"],
@@ -109,19 +110,20 @@ Test Case 4: Contact Consolidation
 Scenario: Two separate primary contacts get linked through a common contact
 Setup:
 sql-- Two existing primary contacts
+```
 INSERT INTO contacts VALUES (1, '1111111111', 'alice@example.com', NULL, 'PRIMARY', '2023-04-01', '2023-04-01', NULL);
 INSERT INTO contacts VALUES (2, '2222222222', 'bob@example.com', NULL, 'PRIMARY', '2023-04-02', '2023-04-02', NULL);
-
+```
 Request: Contact with Alice's email and Bob's phone
 ```
-json{
+{
     "email": "alice@example.com",
     "phoneNumber": "2222222222"
 }
 ```
 Expected Response:
 ```
-json{
+{
     "contact": {
         "primaryContactId": 1,
         "emails": ["alice@example.com", "bob@example.com"],
