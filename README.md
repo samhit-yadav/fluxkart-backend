@@ -52,7 +52,7 @@ Request:
 ```
 {
 	"email": "mcfly@hillvalley.edu",
-	"phoneNumber": "123456"
+	"phoneNumber": "1234567890"
 }
 ```
 
@@ -62,7 +62,7 @@ Expected Response:
     "contact": {
         "primaryContactId": 1,
         "emails": ["john@example.com"],
-        "phoneNumbers": ["123456"],
+        "phoneNumbers": ["1234567890"],
         "secondaryContactIds": []
     }
 }
