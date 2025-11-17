@@ -62,7 +62,7 @@ Expected Response:
     "contact": {
         "primaryContactId": 1,
         "emails": ["john@example.com"],
-        "phoneNumbers": ["1234567890"],
+        "phoneNumbers": ["123456"],
         "secondaryContactIds": []
     }
 }
